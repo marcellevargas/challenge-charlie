@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import BackgroundImageHook from '../hooks/BackgroundImage';
+import BackgroundImageHook from '../hooks/BackgroundImageHook';
 import "./BackgroundImage.css";
 
 export default function BackgroundImage() {
