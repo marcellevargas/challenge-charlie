@@ -24,3 +24,5 @@ yarn-error.log*
 
 # bff dependencies
 /client/node_modules
+
+.env

@@ -4,13 +4,16 @@ import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { BackgroundImageProvider } from "./hooks/BackgroundImageHook";
+import { GeoLocationProvider } from "./hooks/GeoLocationHook";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
     <React.StrictMode>
-        <BackgroundImageProvider>
-            <App />
-        </BackgroundImageProvider>
+        <GeoLocationProvider>
+            <BackgroundImageProvider>
+                <App />
+            </BackgroundImageProvider>
+        </GeoLocationProvider>
     </React.StrictMode>
 );
 
