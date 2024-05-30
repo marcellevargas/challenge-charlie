@@ -4,8 +4,8 @@ require('dotenv').config();
 
 router.use(express.json());
 
-function fetchForecastData(lat, lon, apiKey) {
-    const forecastUrl = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${apiKey}&units=metric`;
+function fetchForecastData(latitude, longitude, apiKey) {
+    const forecastUrl = `https://api.openweathermap.org/data/2.5/forecast?lat=${latitude}&lon=${longitude}&appid=${apiKey}&units=metric`;
 
     return fetch(forecastUrl)
         .then(response => response.json())
@@ -33,10 +33,11 @@ function parseForecastWeather(list) {
 }
 
 router.post("/", (req, res) => {
-    const { lat, lon } = req.body;
+    const { latitude, longitude } = req.body;
+
     const apiKey = process.env.OPEN_WEATHER_KEY;
 
-    fetchForecastData(lat, lon, apiKey)
+    fetchForecastData(latitude, longitude, apiKey)
         .then(futureWeatherData => res.json({ futureWeatherData }))
         .catch(error => {
             console.error('Error fetching weather data:', error);

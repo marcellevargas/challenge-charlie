@@ -6,7 +6,7 @@ const GeoLocationHook = createContext();
 export const GeoLocationProvider = ({ children }) => {
     const [location, setLocation] = useState({
         loaded: false,
-        coordinates: { lat: "", lng: "" },
+        coordinates: { latitude: "", longitude: "" },
         locationName: "",
         error: null
     });
@@ -17,8 +17,8 @@ export const GeoLocationProvider = ({ children }) => {
             ...prevState,
             loaded: true,
             coordinates: {
-                lat: latitude,
-                lng: longitude
+                latitude: latitude,
+                longitude: longitude
             },
         }));
 
@@ -40,7 +40,7 @@ export const GeoLocationProvider = ({ children }) => {
     const onError = error => {
         setLocation({
             loaded: true,
-            coordinates: { lat: "", lng: "" },
+            coordinates: { latitude: "", longitude: "" },
             locationName: "",
             error: error.message
         });
