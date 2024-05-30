@@ -1,26 +1,9 @@
-import { useEffect, useState } from "react";
-import { BingRequests } from "../services/api/BingRequests";
+import { useContext } from 'react';
+import BackgroundImageHook from '../hooks/BackgroundImage';
 import "./BackgroundImage.css";
 
 export default function BackgroundImage() {
-    const [backgroundImg, setBackgroundImg] = useState({
-        url: "",
-        alt: "",
-    });
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState("");
-
-    useEffect(() => {
-        BingRequests()
-            .then((data) => {
-                setBackgroundImg({ url: data.url, alt: data.copyright });
-                setLoading(false);
-            })
-            .catch((error) => {
-                setError(error.message);
-                setLoading(false);
-            });
-    }, []);
+    const { backgroundImg, loading, error } = useContext(BackgroundImageHook);
 
     if (loading) {
         return <div className="loading">LOADING...</div>;
@@ -30,9 +13,13 @@ export default function BackgroundImage() {
         return <div>Error: {error}</div>;
     }
 
+    if (!backgroundImg.url) {
+        return <div>Loading image...</div>;
+    }
+
     return (
         <div className="backgroundImageComponent">
-            <img src={backgroundImg.url} alt={backgroundImg.copyright}  loading="lazy"/>
+            <img src={backgroundImg.url} alt={backgroundImg.alt} loading="lazy" />
         </div>
     );
 }

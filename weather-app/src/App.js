@@ -1,13 +1,12 @@
-import logo from './logo.svg';
-import './App.css';
-import BackgroundImage from './components/BackgroundImage';
+import { useContext } from "react";
+import "./App.css";
+import BackgroundImage from "./components/BackgroundImage";
 
 function App() {
-  return (
-    <div className="App">
-      <BackgroundImage />
-    </div>
-  );
+
+    return (
+        <BackgroundImage/>
+    );
 }
 
 export default App;
