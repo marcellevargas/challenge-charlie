@@ -56,17 +56,18 @@ export const WeatherProvider = ({ children }) => {
                     return {
                         ...prevState,
                         futureWeatherData: newFutureWeatherData,
-                        currentIndex: newIndex - 1 >= 0 ? newIndex - 1 : newFutureWeatherData.length - 1, // Ajustar o índice se necessário
+                        currentIndex: newIndex - 1 >= 0 ? newIndex - 1 : newFutureWeatherData.length - 1,
                         currentWeather: currentItem
                     };
                 });
             };
 
-            //TODO needs improvement
+              //TODO needs improvement
             // const intervalId = setInterval(
             //     updateWeatherDisplay,
             //     3 * 60 * 60 * 1000
             // );
+
             const intervalId = setInterval(
                 updateWeatherDisplay,
                 30 * 1000 
