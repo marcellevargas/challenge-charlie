@@ -1,5 +1,5 @@
 import { createContext, useState, useContext, useEffect } from "react";
-import { WeatherRequest } from "../services/api/WeatherRequest";
+import { weatherRequests } from "../services/https/weatherRequests";
 import { useGeoLocation } from "./GeoLocationHook";
 
 const WeatherHook = createContext();
@@ -23,7 +23,7 @@ export const WeatherProvider = ({ children }) => {
                 try {
                     const { latitude, longitude } = coordinates;
 
-                    const weatherData = await WeatherRequest(
+                    const weatherData = await weatherRequests(
                         latitude,
                         longitude
                     );

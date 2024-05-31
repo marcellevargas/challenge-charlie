@@ -1,4 +1,4 @@
-import { postGeoLocation } from '../services/api/GeolocationRequests';
+import { geoLocationRequests } from '../services/https/geolocationRequests';
 import { createContext, useState, useContext, useEffect } from 'react';
 
 const GeoLocationHook = createContext();
@@ -23,7 +23,7 @@ export const GeoLocationProvider = ({ children }) => {
         }));
 
         try {
-            const locationName = await postGeoLocation(latitude, longitude);
+            const locationName = await geoLocationRequests(latitude, longitude);
             
             setLocation(prevState => ({
                 ...prevState,

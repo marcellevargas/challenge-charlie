@@ -1,4 +1,4 @@
-export const WeatherRequest = async (latitude, longitude) => {
+export const weatherRequests = async (latitude, longitude) => {
     const baseURL = "http://localhost:3005";
 
     const response = await fetch(`${baseURL}/weather`, {

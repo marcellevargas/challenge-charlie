@@ -1,4 +1,4 @@
-export const postGeoLocation = async (latitude, longitude) => {
+export const geoLocationRequests = async (latitude, longitude) => {
     const baseURL = "http://localhost:3005";
 
     const response = await fetch(`${baseURL}/geolocation`, {
