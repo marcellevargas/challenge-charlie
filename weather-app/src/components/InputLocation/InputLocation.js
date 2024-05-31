@@ -1,9 +1,9 @@
 import "./InputLocation.css";
 
-export default function InputLocation({ location }) {
+export default function InputLocation({ state, stateCode }) {
     return (
         <div className="location-container">
-            <h1>{location}</h1>
+            <span>{stateCode}</span><input defaultValue={state}/>
         </div>
     );
 }

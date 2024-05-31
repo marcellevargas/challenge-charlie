@@ -25,7 +25,7 @@ function App() {
     console.log(location)
     return (
         <div className="app-container">
-            <InputLocation location={location.locationName}/>
+            <InputLocation state={location.state} stateCode={location.stateCode}/>
             <BackgroundImage />
             temp: {currentWeather.temp}
             <ul>

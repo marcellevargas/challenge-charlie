@@ -7,7 +7,8 @@ export const GeoLocationProvider = ({ children }) => {
     const [location, setLocation] = useState({
         loaded: false,
         coordinates: { latitude: "", longitude: "" },
-        locationName: "",
+        state: "",
+        stateCode: "",
         error: null
     });
 
@@ -27,7 +28,8 @@ export const GeoLocationProvider = ({ children }) => {
             
             setLocation(prevState => ({
                 ...prevState,
-                locationName: locationName.results[0].components.state
+                state: locationName.results[0].components.state,
+                stateCode: locationName.results[0].components.state_code,
             }));
         } catch (error) {
             setLocation(prevState => ({
@@ -41,7 +43,9 @@ export const GeoLocationProvider = ({ children }) => {
         setLocation({
             loaded: true,
             coordinates: { latitude: "", longitude: "" },
-            locationName: "",
+            state: "",
+            stateCode: "",
+
             error: error.message
         });
     };
