@@ -1,5 +1,6 @@
 import "./App.css";
 import BackgroundImage from "./components/BackgroundImage/BackgroundImage";
+import InputLocation from "./components/InputLocation/InputLocation";
 import { useGeoLocation } from "./hooks/GeoLocationHook";
 import { useWeather } from "./hooks/WeatherHook";
 
@@ -21,10 +22,10 @@ function App() {
     if(!currentWeather) {
         return <div>Loading weather Data</div>;
     }
-
+    console.log(location)
     return (
-        <>
-            name: {location.locationName}
+        <div className="app-container">
+            <InputLocation location={location.locationName}/>
             <BackgroundImage />
             temp: {currentWeather.temp}
             <ul>
@@ -35,7 +36,7 @@ function App() {
                     </li>
                 ))}
             </ul>
-        </>
+        </div>
     );
 }
 

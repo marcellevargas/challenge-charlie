@@ -18,7 +18,7 @@ export default function BackgroundImage() {
     }
 
     return (
-        <div className="backgroundImageComponent">
+        <div className="background-container">
             <img src={backgroundImg.url} alt={backgroundImg.alt} loading="lazy" />
         </div>
     );
