@@ -28,7 +28,9 @@ function parseForecastWeather(list) {
         temp: item.main.temp,
         feelsLike: item.main.feels_like,
         description: item.weather[0].description,
-        windSpeed: item.wind.speed
+        windSpeed: item.wind.speed,
+        pressure: item.main.pressure,
+        humidity: item.main.humidity
     }));
 }
 
