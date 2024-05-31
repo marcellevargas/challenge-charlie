@@ -23,6 +23,6 @@ yarn-debug.log*
 yarn-error.log*
 
 # bff dependencies
-/client/node_modules
+/src/services/api-server/node_modules
 
 .env

@@ -34,7 +34,6 @@ function parseForecastWeather(list) {
 
 router.post("/", (req, res) => {
     const { latitude, longitude } = req.body;
-
     const apiKey = process.env.OPEN_WEATHER_KEY;
 
     fetchForecastData(latitude, longitude, apiKey)
