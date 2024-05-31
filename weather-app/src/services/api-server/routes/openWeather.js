@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const axios = require('axios');
 require('dotenv').config();
 
 router.use(express.json());
@@ -7,9 +8,8 @@ router.use(express.json());
 function fetchForecastData(latitude, longitude, apiKey) {
     const forecastUrl = `https://api.openweathermap.org/data/2.5/forecast?lat=${latitude}&lon=${longitude}&appid=${apiKey}&units=metric`;
 
-    return fetch(forecastUrl)
-        .then(response => response.json())
-        .then(forecastData => parseForecastWeather(forecastData.list));
+    return axios.get(forecastUrl)
+        .then(response => parseForecastWeather(response.data.list));
 }
 
 function parseForecastWeather(list) {
