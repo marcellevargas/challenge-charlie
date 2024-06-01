@@ -1,7 +1,5 @@
 .location-container {
     background-color: #FFFFFF;
-    padding: 15px;
-    min-width: 400px;
     width: 100%;
     display: flex;
     flex-direction: row;
@@ -48,5 +46,7 @@
 @media (min-width: 801px) {
     .location-container {
         max-width: 50vw;
+        padding: 15px;
+        min-width: 400px;
     }
 }
