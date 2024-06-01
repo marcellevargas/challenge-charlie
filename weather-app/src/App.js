@@ -24,12 +24,16 @@ function App() {
     if (!currentWeather) {
         return <div>Loading weather Data</div>;
     }
+    const handleLocationSubmit = (newState) => {
+        console.log('New state submitted:', newState);
+    };
 
     return (
         <div className="app-container">
             <InputLocation
                 state={location.state}
                 stateCode={location.stateCode}
+                onSubmit={handleLocationSubmit} 
             />
             <BackgroundImage />
             <CurrentWeather data={currentWeather} backgroundColor="#EEE8AA80" />
