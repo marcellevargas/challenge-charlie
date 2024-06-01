@@ -1,12 +1,14 @@
 import "./App.css";
-import BackgroundImage from "./components/BackgroundImage/BackgroundImage";
-import InputLocation from "./components/InputLocation/InputLocation";
 import { useGeoLocation } from "./hooks/GeoLocationHook";
 import { useWeather } from "./hooks/WeatherHook";
+import BackgroundImage from "./components/BackgroundImage/BackgroundImage";
+import InputLocation from "./components/InputLocation/InputLocation";
+import CurrentWeather from "./components/CurrentWeather/CurrentWeather";
 
 function App() {
     const location = useGeoLocation();
     const { futureWeatherData, currentWeather } = useWeather();
+    
 
     if (!location.loaded) {
         return <div>Loading Location...</div>;
@@ -22,12 +24,12 @@ function App() {
     if(!currentWeather) {
         return <div>Loading weather Data</div>;
     }
-    console.log(location)
+
     return (
         <div className="app-container">
             <InputLocation state={location.state} stateCode={location.stateCode}/>
             <BackgroundImage />
-            temp: {currentWeather.temp}
+            <CurrentWeather data={currentWeather} backgroundColor="#EEE8AA80"/>
             <ul>
                 {futureWeatherData.slice(1, 3).map((weather, index) => (
                     <li key={index}>

@@ -25,12 +25,12 @@ function parseForecastWeather(list) {
 
     return list.map(item => ({
         dateTime: dateFormatter.format(new Date(item.dt * 1000)),
-        temp: item.main.temp,
-        feelsLike: item.main.feels_like,
-        description: item.weather[0].description,
-        windSpeed: item.wind.speed,
-        pressure: item.main.pressure,
-        humidity: item.main.humidity
+        temp: Math.round(item.main.temp),
+        feelsLike: Math.round(item.main.feels_like),
+        description: item.weather[0].description.charAt(0).toUpperCase() + item.weather[0].description.slice(1),
+        windSpeed: Math.round(item.wind.speed),
+        pressure: Math.round(item.main.pressure),
+        humidity: Math.round(item.main.humidity)
     }));
 }
 
