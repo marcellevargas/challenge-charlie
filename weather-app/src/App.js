@@ -32,7 +32,7 @@ function App() {
     return (
         <div className="app-container">
             <InputLocation
-                stateCode={location.stateCode}
+                city={location.state}
                 onSubmit={handleLocationSubmit} 
             />
             <BackgroundImage />
