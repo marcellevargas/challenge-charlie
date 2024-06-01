@@ -1,7 +1,6 @@
 .location-container {
     background-color: #FFFFFF;
     padding: 15px;
-    max-width: 50vw;
     min-width: 400px;
     width: 100%;
     display: flex;
@@ -30,7 +29,7 @@
 }
 
 .location-container input:focus {
-    border-bottom: 2px solid #000; 
+    border-bottom: 2px solid #000;
 }
 
 .icon {
@@ -40,7 +39,14 @@
     display: flex;
     border-bottom: 1px solid transparent;
 }
+
 .icon:before {
     font-family: 'MeteoconsRegular';
     content: attr(data-icon);
+}
+
+@media (min-width: 801px) {
+    .location-container {
+        max-width: 50vw;
+    }
 }
