@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import "./InputLocation.css";
 
-export default function InputLocation({ state, stateCode, onSubmit }) {
+export default function InputLocation({ state, onSubmit }) {
     const [inputValue, setInputValue] = useState(state);
 
 
@@ -19,7 +19,6 @@ export default function InputLocation({ state, stateCode, onSubmit }) {
     return (
         <div className="location-container">
             <a href="" className="icon" data-icon="("></a>
-            <span>{stateCode}</span>
             <input
                 defaultValue={state}
                 onChange={handleChange}

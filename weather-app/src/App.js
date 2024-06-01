@@ -28,11 +28,10 @@ function App() {
         console.log('New state submitted:', newState);
         setWeatherByCityName(newState);
     };
-    console.log(currentWeather)
+
     return (
         <div className="app-container">
             <InputLocation
-                state={location.state}
                 stateCode={location.stateCode}
                 onSubmit={handleLocationSubmit} 
             />
