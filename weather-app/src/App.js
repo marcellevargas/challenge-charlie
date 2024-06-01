@@ -8,7 +8,7 @@ import FutureWeather from "./components/FutureWeather/FutureWeather";
 
 function App() {
     const location = useGeoLocation();
-    const { futureWeatherData, currentWeather } = useWeather();
+    const { futureWeatherData, currentWeather, setWeatherByCityName } = useWeather();
 
     if (!location.loaded) {
         return <div>Loading Location...</div>;
@@ -26,8 +26,9 @@ function App() {
     }
     const handleLocationSubmit = (newState) => {
         console.log('New state submitted:', newState);
+        setWeatherByCityName(newState);
     };
-
+    console.log(currentWeather)
     return (
         <div className="app-container">
             <InputLocation

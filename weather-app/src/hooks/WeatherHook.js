@@ -1,5 +1,5 @@
 import { createContext, useState, useContext, useEffect } from "react";
-import { weatherRequests } from "../services/https/weatherRequests";
+import { weatherRequests, weatherByCityRequests } from "../services/https/weatherRequests";
 import { useGeoLocation } from "./GeoLocationHook";
 
 const WeatherHook = createContext();
@@ -76,8 +76,34 @@ export const WeatherProvider = ({ children }) => {
             return () => clearInterval(intervalId);
     }, [coordinates]);
 
+    const setWeatherByCityName = async (cityName) => {
+        try {
+            const weatherByCity = await weatherByCityRequests(cityName);
+            setWeather(prevState => ({
+                ...prevState,
+                futureWeatherData: weatherByCity,
+                currentWeather: weatherByCity[0], 
+                currentIndex: 0,
+            }));
+        } catch (error) {
+            console.error(
+                "Failed to load initial weather data:",
+                error
+            );
+            setWeather((prevState) => ({
+                ...prevState,
+                error: error.message,
+            }));
+        }
+    };
+
+    const value = {
+        ...weather,
+        setWeatherByCityName,
+    };
+
     return (
-        <WeatherHook.Provider value={weather}>{children}</WeatherHook.Provider>
+        <WeatherHook.Provider value={value}>{children}</WeatherHook.Provider>
     );
 };
 
