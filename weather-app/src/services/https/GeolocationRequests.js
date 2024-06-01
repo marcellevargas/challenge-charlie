@@ -1,17 +1,34 @@
+import axios from "axios";
+
 export const geoLocationRequests = async (latitude, longitude) => {
     const baseURL = "http://localhost:3005";
 
-    const response = await fetch(`${baseURL}/geolocation`, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ latitude: latitude, longitude: longitude }),
-    });
-
-    if (!response.ok) {
-        throw new Error("Network response was not ok");
+    try {
+        const response = await axios.post(
+            `${baseURL}/geolocation`,
+            {
+                latitude: latitude,
+                longitude: longitude,
+            },
+            {
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            }
+        );
+        return response.data;
+    } catch (error) {
+        if (error.response) {
+            console.error("Error response:", error.response.data);
+            throw new Error(
+                "Network response was not ok: " + error.response.data
+            );
+        } else if (error.request) {
+            console.error("Error request:", error.request);
+            throw new Error("No response from server");
+        } else {
+            console.error("Error setting up your request:", error.message);
+            throw new Error("Error setting up your request: " + error.message);
+        }
     }
-    
-    return response.json();
 };
