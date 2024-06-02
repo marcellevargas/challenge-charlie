@@ -1,11 +1,15 @@
-import { useState } from 'react';
+import { useState, useEffect } from "react";
 import "./InputLocation.css";
 
 export default function InputLocation({ city, onSubmit }) {
     const [inputValue, setInputValue] = useState(city);
 
+    useEffect(() => {
+        setInputValue(city);
+    }, [city]);
+
     const handleKeyDown = (e) => {
-        if (e.key === 'Enter') {
+        if (e.key === "Enter") {
             e.preventDefault();
             onSubmit(inputValue);
         }
@@ -16,18 +20,19 @@ export default function InputLocation({ city, onSubmit }) {
     };
 
     const handleFocus = () => {
-        setInputValue('');
+        setInputValue("");
     };
 
     const handleBlur = () => {
-        if (inputValue === '') {
+        if (inputValue === "") {
             setInputValue(city);
         }
     };
 
     return (
         <div className="location-container">
-            <a href="" className="icon" data-icon="("></a>
+            <a className="icon" data-icon="("></a>
+
             <input
                 value={inputValue}
                 onChange={handleChange}
