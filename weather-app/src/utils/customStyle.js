@@ -20,3 +20,28 @@ export const handleBackgroundColor = (temperature) => {
             };
     }
 };
+
+export const handleIcon = (description) => {
+    switch (description) {
+        case "clear sky":
+            return "B"
+        case "few clouds":
+            return "H"
+        case "scattered clouds":
+            return "N"
+        case "broken clouds":
+            return "L"
+        case "shower rain":
+            return "R"
+        case "rain":
+            return "R"
+        case "thunderstorm":
+            return "Z"
+        case "snow":
+            return "W"
+        case "mist":
+            return "M"
+        default:
+            return ")"
+    }
+}

@@ -1,8 +1,9 @@
 import "./CurrentWeather.css";
-import { handleBackgroundColor } from "../../utils/customStyle";
+import { handleBackgroundColor, handleIcon } from "../../utils/customStyle";
 
-export default function CurrentWeather({ data, icon }) {
+export default function CurrentWeather({ data }) {
     const { currentColor } = handleBackgroundColor(data.temp);
+    const icon = handleIcon(data.description.toLowerCase())
 
     return (
         <div

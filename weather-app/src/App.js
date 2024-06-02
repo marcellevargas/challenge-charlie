@@ -38,7 +38,6 @@ function App() {
             <BackgroundImage />
             <CurrentWeather 
                 data={currentWeather}
-                icon="A"
             />
 
             {futureWeatherData.slice(1, 3).map((weather, index) => (
