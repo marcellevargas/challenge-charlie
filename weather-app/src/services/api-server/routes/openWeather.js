@@ -38,14 +38,10 @@ async function fetchWeatherByCityName(cityName, apiKey) {
 }
 
 function parseForecastWeather(list) {
-    const dateFormatter = new Intl.DateTimeFormat('pt-BR', {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-        weekday: 'long',
-        hour: 'numeric',
-        minute: 'numeric',
-        timeZone: 'America/Sao_Paulo'
+    const dateFormatter = new Intl.DateTimeFormat('en-US', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric'
     });
 
     return list.map(item => ({

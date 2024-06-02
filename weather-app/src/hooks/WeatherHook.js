@@ -19,78 +19,78 @@ export const WeatherProvider = ({ children }) => {
             console.log('Coordinates not available yet.');
             return;
         }
-            const fetchInitialWeatherData = async () => {
-                try {
-                    const { latitude, longitude } = coordinates;
+        
+        const dateFormatter = new Intl.DateTimeFormat('en-US', {
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric'
+        });        
 
-                    const weatherData = await weatherRequests(
-                        latitude,
-                        longitude
-                    );
-                    setWeather(prevState => ({
-                        ...prevState,
-                        futureWeatherData: weatherData,
-                        currentWeather: weatherData[0], 
-                        currentIndex: 0,
-                    }));
-                } catch (error) {
-                    console.error(
-                        "Failed to load initial weather data:",
-                        error
-                    );
-                    setWeather((prevState) => ({
-                        ...prevState,
-                        error: error.message,
-                    }));
-                }
-            };
+        const fetchInitialWeatherData = async () => {
+            try {
+                const { latitude, longitude } = coordinates;
+                const weatherData = await weatherRequests(latitude, longitude);
+                console.log("Weather data fetched:", weatherData);
+                const today = dateFormatter.format(new Date());
+                const todayWeather = weatherData.find(weather => weather.dateTime === today);
+                console.log("Today's weather:", today);
 
-            fetchInitialWeatherData();
+                setWeather(prevState => ({
+                    ...prevState,
+                    futureWeatherData: weatherData,
+                    currentWeather: todayWeather || null,
+                    currentIndex: 0,
+                }));
+            } catch (error) {
+                console.error("Failed to load initial weather data:", error);
+                setWeather(prevState => ({
+                    ...prevState,
+                    error: error.message,
+                }));
+            }
+        };
 
-            const updateWeatherDisplay = () => {
-                setWeather(prevState => {
-                    const newIndex = (prevState.currentIndex + 1) % prevState.futureWeatherData.length;
-                    const newFutureWeatherData = [...prevState.futureWeatherData];
-                    const currentItem = newFutureWeatherData.splice(newIndex, 1)[0];
-            
-                    return {
-                        ...prevState,
-                        futureWeatherData: newFutureWeatherData,
-                        currentIndex: newIndex - 1 >= 0 ? newIndex - 1 : newFutureWeatherData.length - 1,
-                        currentWeather: currentItem
-                    };
-                });
-            };
+        fetchInitialWeatherData();
 
-              //TODO needs improvement
-            // const intervalId = setInterval(
-            //     updateWeatherDisplay,
-            //     3 * 60 * 60 * 1000
-            // );
+        const updateWeatherDisplay = () => {
+            setWeather(prevState => {
+                const today = dateFormatter.format(new Date());
+                const newIndex = (prevState.currentIndex + 1) 
+                const newWeatherData = prevState.futureWeatherData.slice(newIndex)
 
-            const intervalId = setInterval(
-                updateWeatherDisplay,
-                30 * 1000 
-            );
+                const todaysWeather = newWeatherData.find(weather => weather.dateTime === today);
+                console.log("Updated today's weather:", todaysWeather);
+                return {
+                    ...prevState,
+                    currentWeather: todaysWeather || prevState.currentWeather,
+                    currentIndex: newIndex,
+                };
+            });
+        };
 
-            return () => clearInterval(intervalId);
+
+        const intervalId = setInterval(updateWeatherDisplay, 10 * 1000);
+
+        return () => clearInterval(intervalId);
     }, [coordinates]);
 
     const setWeatherByCityName = async (cityName) => {
         try {
             const weatherByCity = await weatherByCityRequests(cityName);
+            const today = new Date().toDateString();
+            const todayWeather = weatherByCity.find(w => new Date(w.date).toDateString() === today);
+            console.log("City weather data fetched:", weatherByCity);
+            console.log("Today's city weather:", todayWeather);
+            
             setWeather(prevState => ({
                 ...prevState,
                 futureWeatherData: weatherByCity,
-                currentWeather: weatherByCity[0], 
+                currentWeather: todayWeather || null,
                 currentIndex: 0,
             }));
         } catch (error) {
-            console.error(
-                "Failed to load initial weather data:",
-                error
-            );
-            setWeather((prevState) => ({
+            console.error("Failed to load weather data by city:", error);
+            setWeather(prevState => ({
                 ...prevState,
                 error: error.message,
             }));
