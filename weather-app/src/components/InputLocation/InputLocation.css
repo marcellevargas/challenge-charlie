@@ -45,7 +45,7 @@
 
 @media (min-width: 801px) {
     .location-container {
-        max-width: 50vw;
+        max-width: 70vw;
         padding: 15px;
         min-width: 400px;
     }

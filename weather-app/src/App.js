@@ -33,10 +33,14 @@ function App() {
         <div className="app-container">
             <InputLocation
                 city={location.state}
-                onSubmit={handleLocationSubmit} 
+                onSubmit={handleLocationSubmit}
             />
             <BackgroundImage />
-            <CurrentWeather data={currentWeather} backgroundColor="#EEE8AA80" />
+            <CurrentWeather 
+                data={currentWeather}
+                backgroundColor="#EEE8AA80"
+                icon="A"
+            />
 
             {futureWeatherData.slice(1, 3).map((weather, index) => (
                 <FutureWeather

@@ -1,11 +1,11 @@
 import "./CurrentWeather.css"
 
-export default function CurrentWeather({ data, backgroundColor }) {
+export default function CurrentWeather({ data, backgroundColor, icon }) {
     console.log(data);
     return (
         <div className="current-weather-container" style={{backgroundColor: backgroundColor}} >
             <div className="image">
-                <a href="" className="icon" data-icon="("></a>
+                <a href="" className="icon" data-icon={icon}></a>
             </div>
             <div className="weather-data">
                 <p>Today</p>

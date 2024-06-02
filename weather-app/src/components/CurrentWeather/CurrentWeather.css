@@ -51,7 +51,7 @@
 @media (min-width: 801px) {
     .current-weather-container {
         flex-direction: row;
-        max-width: 50vw;
+        max-width: 70vw;
         min-width: 400px;
         padding: 15px;
     }
@@ -59,15 +59,26 @@
     .image,
     .weather-data {
         width: 50%;
-        height: auto;
+        height: 100%;
+    }
+
+    .image {
+        align-items: center;
+    }
+
+    .weather-data {
         align-items: flex-start;
+        justify-content: center;
     }
 
     .current-weather-container .image .icon {
-        font-size: 13em;
+        font-size: 40vw;
     }
 
     .current-weather-container .weather-data p {
         font-size: 2.8em;
+    }
+    .current-weather-container .weather-data span {
+        font-size: 1.5em;
     }
 }
