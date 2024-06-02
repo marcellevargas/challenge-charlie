@@ -38,7 +38,6 @@ function App() {
             <BackgroundImage />
             <CurrentWeather 
                 data={currentWeather}
-                backgroundColor="#EEE8AA80"
                 icon="A"
             />
 
@@ -47,6 +46,7 @@ function App() {
                     key={index}
                     label={index === 0 ? "Tomorrow" : "After tomorrow"}
                     temperature={weather.temp}
+                    color={index === 0 ? 0 : 1}
                 />
             ))}
         </div>

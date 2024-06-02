@@ -1,9 +1,14 @@
-import "./CurrentWeather.css"
+import "./CurrentWeather.css";
+import { handleBackgroundColor } from "../../utils/customStyle";
 
-export default function CurrentWeather({ data, backgroundColor, icon }) {
-    console.log(data);
+export default function CurrentWeather({ data, icon }) {
+    const { currentColor } = handleBackgroundColor(data.temp);
+
     return (
-        <div className="current-weather-container" style={{backgroundColor: backgroundColor}} >
+        <div
+            className="current-weather-container"
+            style={{ background: currentColor }}
+        >
             <div className="image">
                 <a href="" className="icon" data-icon={icon}></a>
             </div>

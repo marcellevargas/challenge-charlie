@@ -1,10 +1,21 @@
 import "./FutureWeather.css";
+import { handleBackgroundColor } from "../../utils/customStyle";
 
-export default function FutureWeather({ label, temperature }) {
+export default function FutureWeather({ label, temperature, color }) {
+    const { tomorrowColor, afterTomorrowColor } =
+        handleBackgroundColor(temperature);
+    let backgroundColor = "";
+
+    if (color === 0) {
+        backgroundColor = tomorrowColor;
+    } else {
+        backgroundColor = afterTomorrowColor;
+    }
+
     return (
         <div
             className="future-weather-container"
-            style={{ backgroundColor: "#FFE4B580" }}
+            style={{ background: backgroundColor }}
         >
             <div className="future-weather-gap"></div>
             <div className="future-weather-data">
