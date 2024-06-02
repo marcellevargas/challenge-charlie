@@ -55,7 +55,8 @@ function parseForecastWeather(list) {
         description: item.weather[0].description.charAt(0).toUpperCase() + item.weather[0].description.slice(1),
         windSpeed: Math.round(item.wind.speed),
         pressure: Math.round(item.main.pressure),
-        humidity: Math.round(item.main.humidity)
+        humidity: Math.round(item.main.humidity),
+        icon: item.weather[0].icon.split(".")[0].slice(0,2)
     }));
 }
 
