@@ -3,7 +3,7 @@ import { handleBackgroundColor, handleIcon } from "../../utils/customStyle";
 
 export default function CurrentWeather({ data }) {
     const { currentColor } = handleBackgroundColor(data.temp);
-    const icon = handleIcon(data.description.toLowerCase())
+    const icon = handleIcon(data.icon)
 
     return (
         <div

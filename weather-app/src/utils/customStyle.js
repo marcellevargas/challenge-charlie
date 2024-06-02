@@ -21,27 +21,27 @@ export const handleBackgroundColor = (temperature) => {
     }
 };
 
-export const handleIcon = (description) => {
-    switch (description) {
-        case "clear sky":
+export const handleIcon = (iconCode) => {
+    switch (true) {
+        case iconCode === "01":
             return "B"
-        case "few clouds":
+        case iconCode === "02":
             return "H"
-        case "scattered clouds":
+        case iconCode === "03":
             return "N"
-        case "broken clouds":
-            return "L"
-        case "shower rain":
+        case iconCode === "04":
+            return "Y"
+        case iconCode === "09":
             return "R"
-        case "rain":
+        case iconCode === "10":
             return "R"
-        case "thunderstorm":
-            return "Z"
-        case "snow":
+        case iconCode === "11":
+            return "O"
+        case iconCode === "13":
             return "W"
-        case "mist":
+        case iconCode === "50":
             return "M"
         default:
-            return ")"
+            return "A"
     }
 }
