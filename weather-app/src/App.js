@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import "./App.css";
 import { useGeoLocation } from "./hooks/GeoLocationHook";
 import { useWeather } from "./hooks/WeatherHook";
@@ -5,25 +6,33 @@ import BackgroundImage from "./components/BackgroundImage/BackgroundImage";
 import InputLocation from "./components/InputLocation/InputLocation";
 import CurrentWeather from "./components/CurrentWeather/CurrentWeather";
 import FutureWeather from "./components/FutureWeather/FutureWeather";
+import Loading from "./components/Loading/Loading";
 
 function App() {
+    const [loadingTimeout, setLoadingTimeout] = useState(false);
     const location = useGeoLocation();
     const { futureWeatherData, currentWeather, setWeatherByCityName } = useWeather();
 
-    if (!location.loaded) {
-        return <div>Loading Location...</div>;
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setLoadingTimeout(true);
+        }, 60000);
+
+        return () => clearTimeout(timer);
+    }, []);
+
+    if (loadingTimeout) {
+        return <div>Error: Loading took too long.</div>;
+    }
+
+    if (!location.loaded || !futureWeatherData || !currentWeather) {
+        return <Loading />;
     }
 
     if (location.error) {
         return <div>Error: {location.error}</div>;
     }
 
-    if (!futureWeatherData) {
-        return <div>Loading weather Data</div>;
-    }
-    if (!currentWeather) {
-        return <div>Loading weather Data</div>;
-    }
     const handleLocationSubmit = (newState) => {
         console.log('New state submitted:', newState);
         setWeatherByCityName(newState);
