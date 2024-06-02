@@ -2,21 +2,21 @@ export const handleBackgroundColor = (temperature) => {
     switch (true) {
         case temperature < 15:
             return {
-                currentColor: "rgba(0,0,139,0.8)",
-                tomorrowColor: "rgba(0,0,139,0.6)",
-                afterTomorrowColor: "rgba(0,0,139,0.4)",
+                currentColor: "rgba(0,0,139,0.6)",
+                tomorrowColor: "rgba(135,206,235)",
+                afterTomorrowColor: "rgba(0,0,205)",
             };
         case temperature > 35:
             return {
-                currentColor: "rgba(128,0,0,0.8)",
-                tomorrowColor: "rgba(128,0,0,0.6)",
-                afterTomorrowColor: "rgba(128,0,0,0.4)",
+                currentColor: "rgba(128,0,0,0.6)",
+                tomorrowColor: "rgba(255,99,71)",
+                afterTomorrowColor: "rgba(139,0,0)",
             };
         default:
             return {
-                currentColor: "rgba(255,215,0,0.8)",
-                tomorrowColor: "rgba(255,215,0,0.6)",
-                afterTomorrowColor: "rgba(255,215,0,0.4)",
+                currentColor: "rgba(255,215,0,0.6)",
+                tomorrowColor: "rgba(255, 228, 116)",
+                afterTomorrowColor: "rgba(208, 175, 18)",
             };
     }
 };
