@@ -7,6 +7,7 @@ import InputLocation from "./components/InputLocation/InputLocation";
 import CurrentWeather from "./components/CurrentWeather/CurrentWeather";
 import FutureWeather from "./components/FutureWeather/FutureWeather";
 import Loading from "./components/Loading/Loading";
+import Error from './components/Error/Error';
 
 function App() {
     const [loadingTimeout, setLoadingTimeout] = useState(false);
@@ -22,7 +23,7 @@ function App() {
     }, []);
 
     if (loadingTimeout) {
-        return <div>Error: Loading took too long.</div>;
+        return <Error/>;
     }
 
     if (!location.loaded || !futureWeatherData || !currentWeather) {
@@ -30,7 +31,7 @@ function App() {
     }
 
     if (location.error) {
-        return <div>Error: {location.error}</div>;
+        return <Error/>;
     }
 
     const handleLocationSubmit = (newState) => {
