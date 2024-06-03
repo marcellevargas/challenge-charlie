@@ -12,8 +12,8 @@ import Error from './components/Error/Error';
 function App() {
     const [loadingTimeout, setLoadingTimeout] = useState(false);
     const location = useGeoLocation();
-    const { futureWeatherData, currentWeather, setWeatherByCityName } = useWeather();
-
+    const { futureWeatherData, currentWeather, setWeatherByCityName, currentIndex } = useWeather();
+    
     useEffect(() => {
         const timer = setTimeout(() => {
             setLoadingTimeout(true);
@@ -27,7 +27,7 @@ function App() {
     }
 
     if (!location.loaded || !futureWeatherData || !currentWeather) {
-        return <Loading />;
+        return <Loading/>;
     }
 
     if (location.error) {
@@ -47,10 +47,10 @@ function App() {
             />
             <BackgroundImage />
             <CurrentWeather 
-                data={currentWeather}
+                data={currentWeather[currentIndex]}
             />
 
-            {futureWeatherData.slice(1, 3).map((weather, index) => (
+            {futureWeatherData.map((weather, index) => (
                 <FutureWeather
                     key={index}
                     label={index === 0 ? "Tomorrow" : "After tomorrow"}
