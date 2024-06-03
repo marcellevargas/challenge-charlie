@@ -1,8 +1,8 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
 # dependencies
-/node_modules
-/.pnp
+/weather-app/node_modules
+/weather-app/.pnp
 .pnp.js
 
 # testing
@@ -23,6 +23,6 @@ yarn-debug.log*
 yarn-error.log*
 
 # bff dependencies
-/src/services/api-server/node_modules
+/weather-server/node_modules
 
 .env

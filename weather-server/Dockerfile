@@ -1,6 +1,6 @@
 FROM node:18
 
-WORKDIR /weather-app/
+WORKDIR /weather-server/
 
 COPY package.json .
 
@@ -8,4 +8,4 @@ CMD [ "npm", "install" ]
 
 COPY . .
 
-EXPOSE 3000
+EXPOSE 3005

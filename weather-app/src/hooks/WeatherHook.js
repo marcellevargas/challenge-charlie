@@ -62,6 +62,12 @@ export const WeatherProvider = ({ children }) => {
                         formattedDayAfterTomorrow
                 );
 
+                console.log(weatherData.filter(
+                    (weather) =>
+                        dateFormatter.format(
+                            new Date(weather.dateTime)
+                        ) === dateFormatter.format(today)
+                ))
                 setWeather((prevState) => ({
                     ...prevState,
                     futureWeatherData: [
