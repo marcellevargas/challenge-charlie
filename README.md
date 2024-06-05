@@ -52,3 +52,6 @@ cd ./challenge-charlie
 ```
 docker-compose up
 ```
+
+## 🌐 Open in browser
+In the browser type http://localhost:3000/
