@@ -1,8 +1,7 @@
 import { createContext, useState, useContext, useEffect, useMemo } from "react";
 import {
     weatherRequests,
-    weatherByCityRequests,
-    weatherCurrentRequests
+    weatherByCityRequests
 } from "../services/https/weatherRequests";
 import { useGeoLocation } from "./GeoLocationHook";
 
@@ -12,7 +11,7 @@ export const WeatherProvider = ({ children }) => {
     const initialWeatherState = {
         futureWeatherData: [],
         currentWeather: null,
-        errorType: "",
+        error: "",
         loading: false
     };
 
@@ -49,27 +48,14 @@ export const WeatherProvider = ({ children }) => {
 
             return { weatherData, futureWeatherData: [tomorrowWeather,dayAfterTomorrowWeather].filter(Boolean) };
         } catch (error) {
-            console.error("Error fetching initial weather data:", error);
-            setWeather(prev => ({ ...prev, errorType: "fetch" }));
+            setWeather(prev => ({ ...prev, error: error }));
             return null;
-        }
-    };
-
-    const updateWeatherData = async (latitude, longitude) => {
-        try {
-            const weatherData = await weatherCurrentRequests(latitude, longitude);
-            setWeather(prev => ({
-                ...prev,
-                currentWeather: weatherData || prev.currentWeather
-            }));
-        } catch (error) {
-            console.error("Error updating weather data:", error);
         }
     };
 
     useEffect(() => {
         if (!coordinates.latitude || !coordinates.longitude) {
-            setWeather(prev => ({ ...prev, errorType: "gps" }));
+            setWeather(prev => ({ ...prev, error: "Empty coordinates" }));
             return;
         }
 
@@ -83,7 +69,7 @@ export const WeatherProvider = ({ children }) => {
                     ...prev,
                     futureWeatherData,
                     currentWeather,
-                    errorType: ""
+                    error: ""
                 }));
             }
         };
@@ -111,11 +97,10 @@ export const WeatherProvider = ({ children }) => {
                 ...prev,
                 futureWeatherData: [tomorrowWeather,dayAfterTomorrowWeather].filter(Boolean),
                 currentWeather: weatherData || null,
-                errorType: ""
+                error: ""
             }));
         } catch (error) {
-            console.error("Failed to load weather data by city:", error);
-            setWeather(prev => ({ ...prev, errorType: "fetch" }));
+            setWeather(prev => ({ ...prev, error: error }));
         }
     };
 

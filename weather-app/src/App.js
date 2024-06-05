@@ -10,35 +10,28 @@ import Loading from "./components/Loading/Loading";
 import Error from './components/Error/Error';
 
 function App() {
-    const [loadingTimeout, setLoadingTimeout] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
     const location = useGeoLocation();
-    const { futureWeatherData, currentWeather, setWeatherByCityName, currentIndex } = useWeather();
-    
+    const { futureWeatherData, currentWeather, setWeatherByCityName } = useWeather();
+
     useEffect(() => {
-        const timer = setTimeout(() => {
-            setLoadingTimeout(true);
-        }, 60000);
+        if (location.loaded && currentWeather && futureWeatherData && futureWeatherData.length > 0) {
+            setIsLoading(false);
+        }
+    }, [location.loaded, currentWeather, futureWeatherData]);
 
-        return () => clearTimeout(timer);
-    }, []);
-
-    if (loadingTimeout) {
-        return <Error/>;
-    }
-
-    if (!location.loaded || !futureWeatherData || !currentWeather) {
-        return <Loading/>;
-    }
-
-    if (location.error) {
-        return <Error/>;
-    }
-
-    const handleLocationSubmit = (newState) => {
-        console.log('New state submitted:', newState);
+    const handleLocationSubmit = newState => {
         setWeatherByCityName(newState);
     };
-    console.log(currentWeather)
+
+    if (location.error || (!location.loaded && !isLoading)) {
+        return <Error />;
+    }
+
+    if (isLoading) {
+        return <Loading />;
+    }
+
     return (
         <div className="app-container">
             <InputLocation
@@ -46,11 +39,9 @@ function App() {
                 onSubmit={handleLocationSubmit}
             />
             <BackgroundImage />
-            <CurrentWeather 
-                data={currentWeather[currentIndex]}
-            />
+            <CurrentWeather data={currentWeather} />
 
-            {futureWeatherData.map((weather, index) => (
+            {futureWeatherData.slice(0, 2).map((weather, index) => (
                 <FutureWeather
                     key={index}
                     label={index === 0 ? "Tomorrow" : "After tomorrow"}
