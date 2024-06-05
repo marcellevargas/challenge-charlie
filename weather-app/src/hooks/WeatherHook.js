@@ -1,155 +1,142 @@
-import { createContext, useState, useContext, useEffect } from "react";
+import { createContext, useState, useContext, useEffect, useMemo } from "react";
 import {
     weatherRequests,
     weatherByCityRequests,
+    weatherCurrentRequests
 } from "../services/https/weatherRequests";
 import { useGeoLocation } from "./GeoLocationHook";
 
-const WeatherHook = createContext();
+const WeatherContext = createContext();
 
 export const WeatherProvider = ({ children }) => {
-    const initialWeatherData = {
+    const initialWeatherState = {
         futureWeatherData: [],
-        currentIndex: 0,
         currentWeather: null,
-        erroType: ""
+        errorType: "",
+        loading: false
     };
 
-    const [weather, setWeather] = useState(initialWeatherData);
+    const [weather, setWeather] = useState(initialWeatherState);
     const { coordinates } = useGeoLocation();
+    const today = new Date();
+    const dateFormatter = new Intl.DateTimeFormat("en-US", {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric",
+    });
+    const tomorrow = new Date(today);
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    const formattedTomorrow = dateFormatter.format(tomorrow);
+    
+    const dayAfterTomorrow = new Date(today);
+    dayAfterTomorrow.setDate(dayAfterTomorrow.getDate() + 2);
+    const formattedDayAfterTomorrow = dateFormatter.format(dayAfterTomorrow);
+
+    const fetchWeatherData = async (latitude, longitude) => {
+        try {
+            const { weatherData, futureWeatherData } = await weatherRequests(latitude, longitude);
+            const tomorrowWeather = futureWeatherData.find(
+                (weather) =>
+                    dateFormatter.format(new Date(weather.dateTime)) ===
+                    formattedTomorrow
+            );
+            
+            const dayAfterTomorrowWeather = futureWeatherData.find(
+                (weather) =>
+                    dateFormatter.format(new Date(weather.dateTime)) ===
+                    formattedDayAfterTomorrow
+            );
+
+            return { weatherData, futureWeatherData: [tomorrowWeather,dayAfterTomorrowWeather].filter(Boolean) };
+        } catch (error) {
+            console.error("Error fetching initial weather data:", error);
+            setWeather(prev => ({ ...prev, errorType: "fetch" }));
+            return null;
+        }
+    };
+
+    const updateWeatherData = async (latitude, longitude) => {
+        try {
+            const weatherData = await weatherCurrentRequests(latitude, longitude);
+            setWeather(prev => ({
+                ...prev,
+                currentWeather: weatherData || prev.currentWeather
+            }));
+        } catch (error) {
+            console.error("Error updating weather data:", error);
+        }
+    };
 
     useEffect(() => {
         if (!coordinates.latitude || !coordinates.longitude) {
-            setTimeout(() => {
-                setWeather((prevState) => ({
-                    ...prevState,
-                    erroType: "gps",
-                }));
-            }, 60000);
+            setWeather(prev => ({ ...prev, errorType: "gps" }));
             return;
         }
 
-        const dateFormatter = new Intl.DateTimeFormat("en-US", {
-            day: "2-digit",
-            month: "2-digit",
-            year: "numeric",
-        });
+        const init = async () => {
+            const { latitude, longitude } = coordinates;
+            const weatherData = await fetchWeatherData(latitude, longitude);
 
-        const fetchInitialWeatherData = async () => {
-            try {
-                const { latitude, longitude } = coordinates;
-                const weatherData = await weatherRequests(latitude, longitude);
-
-                const today = new Date();
-
-                const tomorrow = new Date(today);
-                tomorrow.setDate(tomorrow.getDate() + 1);
-                const dayAfterTomorrow = new Date(today);
-                dayAfterTomorrow.setDate(dayAfterTomorrow.getDate() + 2);
-
-                const formattedTomorrow = dateFormatter.format(tomorrow);
-                const formattedDayAfterTomorrow =
-                    dateFormatter.format(dayAfterTomorrow);
-
-                const tomorrowWeather = weatherData.find(
-                    (weather) =>
-                        dateFormatter.format(new Date(weather.dateTime)) ===
-                        formattedTomorrow
-                );
-                const dayAfterTomorrowWeather = weatherData.find(
-                    (weather) =>
-                        dateFormatter.format(new Date(weather.dateTime)) ===
-                        formattedDayAfterTomorrow
-                );
-
-                console.log(weatherData.filter(
-                    (weather) =>
-                        dateFormatter.format(
-                            new Date(weather.dateTime)
-                        ) === dateFormatter.format(today)
-                ))
-                setWeather((prevState) => ({
-                    ...prevState,
-                    futureWeatherData: [
-                        tomorrowWeather,
-                        dayAfterTomorrowWeather,
-                    ].filter(Boolean),
-                    currentWeather:
-                        weatherData.filter(
-                            (weather) =>
-                                dateFormatter.format(
-                                    new Date(weather.dateTime)
-                                ) === dateFormatter.format(today)
-                        ) || null,
-                    currentIndex: 0,
-                }));
-            } catch (error) {
-                setWeather((prevState) => ({
-                    ...prevState,
-                    erroType: "fetch",
+            if (weatherData) {
+                const { weatherData: currentWeather, futureWeatherData } = weatherData;
+                setWeather(prev => ({
+                    ...prev,
+                    futureWeatherData,
+                    currentWeather,
+                    errorType: ""
                 }));
             }
         };
 
-        fetchInitialWeatherData();
+        init();
 
-        const updateWeatherDisplay = () => {
-            setWeather((prevState) => {
-                const newIndex = prevState.currentIndex + 1;
-                return {
-                    ...prevState,
-                    currentIndex: prevState.currentWeather[newIndex]
-                        ? newIndex
-                        : prevState.currentIndex,
-                };
-            });
-        };
-
-        const intervalId = setInterval(updateWeatherDisplay, 10 * 1000);
-
-        return () => clearInterval(intervalId);
-    }, [coordinates]);
+    }, [coordinates.latitude, coordinates.longitude]);
 
     const setWeatherByCityName = async (cityName) => {
         try {
-            const weatherByCity = await weatherByCityRequests(cityName);
-            const today = new Date().toDateString();
-            const todayWeather = weatherByCity.find(
-                (w) => new Date(w.date).toDateString() === today
+            const { weatherData, futureWeatherData } = await weatherByCityRequests(cityName);
+            const tomorrowWeather = futureWeatherData.find(
+                (weather) =>
+                    dateFormatter.format(new Date(weather.dateTime)) ===
+                    formattedTomorrow
             );
-
-            setWeather((prevState) => ({
-                ...prevState,
-                futureWeatherData: weatherByCity,
-                currentWeather: todayWeather || null,
-                currentIndex: 0,
+            
+            const dayAfterTomorrowWeather = futureWeatherData.find(
+                (weather) =>
+                    dateFormatter.format(new Date(weather.dateTime)) ===
+                    formattedDayAfterTomorrow
+            );
+            
+            setWeather(prev => ({
+                ...prev,
+                futureWeatherData: [tomorrowWeather,dayAfterTomorrowWeather].filter(Boolean),
+                currentWeather: weatherData || null,
+                errorType: ""
             }));
         } catch (error) {
             console.error("Failed to load weather data by city:", error);
-            setWeather((prevState) => ({
-                ...prevState,
-                erroType: "gps",
-            }));
+            setWeather(prev => ({ ...prev, errorType: "fetch" }));
         }
     };
 
-    const value = {
+    const providerValue = useMemo(() => ({
         ...weather,
-        setWeatherByCityName,
-    };
+        setWeatherByCityName
+    }), [weather]);
 
     return (
-        <WeatherHook.Provider value={value}>{children}</WeatherHook.Provider>
+        <WeatherContext.Provider value={providerValue}>
+            {children}
+        </WeatherContext.Provider>
     );
 };
 
 export const useWeather = () => {
-    const context = useContext(WeatherHook);
+    const context = useContext(WeatherContext);
     if (context === undefined) {
         throw new Error("useWeather must be used within a WeatherProvider");
     }
-
     return context;
 };
 
-export default WeatherHook;
+export default WeatherContext;
