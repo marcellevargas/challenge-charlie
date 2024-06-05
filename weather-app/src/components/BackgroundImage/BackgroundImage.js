@@ -1,9 +1,7 @@
-import { useContext } from 'react';
-import BackgroundImageHook from '../../hooks/BackgroundImageHook';
 import "./BackgroundImage.css";
 
-export default function BackgroundImage() {
-    const { backgroundImg, loading, error } = useContext(BackgroundImageHook);
+export default function BackgroundImage({ url, alt, loading, error }) {
+   
 
     if (loading) {
         return <div className="loading">LOADING...</div>;
@@ -13,13 +11,13 @@ export default function BackgroundImage() {
         return <div>Error: {error}</div>;
     }
 
-    if (!backgroundImg.url) {
+    if (!url) {
         return <div>Loading image...</div>;
     }
 
     return (
         <div className="background-container">
-            <img src={backgroundImg.url} alt={backgroundImg.alt} loading="lazy" />
+            <img src={url} alt={alt} loading="lazy" />
         </div>
     );
 }

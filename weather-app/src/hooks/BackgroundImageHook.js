@@ -1,30 +1,54 @@
-import { createContext, useState, useEffect } from 'react';
-import { bingRequests } from "../services/https/bingRequests";
+import { createContext, useState, useContext, useEffect } from 'react';
+import { bingRequests } from '../services/https/bingRequests';
 
-const BackgroundImageHook = createContext();
+const BackgroundImageContext = createContext();
+
+const defaultImageState = {
+    url: '',
+    alt: '',
+    loading: true,
+    error: null
+};
 
 export const BackgroundImageProvider = ({ children }) => {
-    const [backgroundImg, setBackgroundImg] = useState({ url: "", alt: "" });
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState("");
+    const [image, setImage] = useState(defaultImageState);
+
+    const onSuccess = data => {
+        setImage({
+            url: data.url,
+            alt: data.copyright,
+            loading: false,
+            error: null
+        });
+    };
+
+    const onError = error => {
+        setImage({
+            ...defaultImageState,
+            loading: false,
+            error: error.message
+        });
+    };
 
     useEffect(() => {
         bingRequests()
-            .then(data => {
-                setBackgroundImg({ url: data.url, alt: data.copyright });
-                setLoading(false);
-            })
-            .catch(error => {
-                setError(error.message);
-                setLoading(false);
-            });
+            .then(onSuccess)
+            .catch(onError);
     }, []);
 
     return (
-        <BackgroundImageHook.Provider value={{ backgroundImg, loading, error }}>
+        <BackgroundImageContext.Provider value={image}>
             {children}
-        </BackgroundImageHook.Provider>
+        </BackgroundImageContext.Provider>
     );
-}
+};
 
-export default BackgroundImageHook;
+export const useBackgroundImage = () => {
+    const context = useContext(BackgroundImageContext);
+    if (context === undefined) {
+        throw new Error('useBackgroundImage must be used within a BackgroundImageProvider');
+    }
+    return context;
+};
+
+export default BackgroundImageContext;

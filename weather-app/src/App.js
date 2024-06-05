@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import "./App.css";
 import { useGeoLocation } from "./hooks/GeoLocationHook";
 import { useWeather } from "./hooks/WeatherHook";
+import {useBackgroundImage} from "./hooks/BackgroundImageHook"
 import BackgroundImage from "./components/BackgroundImage/BackgroundImage";
 import InputLocation from "./components/InputLocation/InputLocation";
 import CurrentWeather from "./components/CurrentWeather/CurrentWeather";
@@ -13,6 +14,7 @@ function App() {
     const [isLoading, setIsLoading] = useState(true);
     const location = useGeoLocation();
     const { futureWeatherData, currentWeather, setWeatherByCityName } = useWeather();
+    const { url, alt, loading, error } = useBackgroundImage();
 
     useEffect(() => {
         if (location.loaded && currentWeather && futureWeatherData && futureWeatherData.length > 0) {
@@ -38,7 +40,12 @@ function App() {
                 city={location.state}
                 onSubmit={handleLocationSubmit}
             />
-            <BackgroundImage />
+            <BackgroundImage 
+               url={url}
+               alt={alt}
+               loading={loading}
+               error={error}
+            />
             <CurrentWeather data={currentWeather} />
 
             {futureWeatherData.slice(0, 2).map((weather, index) => (
