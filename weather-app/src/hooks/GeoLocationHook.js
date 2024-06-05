@@ -1,52 +1,48 @@
-import { geoLocationRequests } from '../services/https/geolocationRequests';
 import { createContext, useState, useContext, useEffect } from 'react';
+import { geoLocationRequests } from '../services/https/geolocationRequests';
 
-const GeoLocationHook = createContext();
+const GeoLocationContext = createContext();
+
+const defaultLocationState = {
+    loaded: false,
+    coordinates: { latitude: "", longitude: "" },
+    state: "",
+    stateCode: "",
+    error: null
+};
 
 export const GeoLocationProvider = ({ children }) => {
-    const [location, setLocation] = useState({
-        loaded: false,
-        coordinates: { latitude: "", longitude: "" },
-        state: "",
-        stateCode: "",
-        error: null
-    });
+    const [location, setLocation] = useState(defaultLocationState);
 
-    const onSuccess = async location => {
-        const { latitude, longitude } = location.coords;
+    const onSuccess = async ({ coords: { latitude, longitude } }) => {
         setLocation(prevState => ({
             ...prevState,
             loaded: true,
-            coordinates: {
-                latitude: latitude,
-                longitude: longitude
-            },
+            coordinates: { latitude, longitude },
         }));
 
         try {
-            const locationName = await geoLocationRequests(latitude, longitude);
-            
+            const locationData = await geoLocationRequests(latitude, longitude);
+            const { state, state_code } = locationData.results[0].components;
+
             setLocation(prevState => ({
                 ...prevState,
-                state: locationName.results[0].components.state,
-                stateCode: locationName.results[0].components.state_code,
+                state,
+                stateCode: state_code,
             }));
         } catch (error) {
             setLocation(prevState => ({
                 ...prevState,
-                error: error.message
+                error: `Failed to fetch location name: ${error.message}`
             }));
         }
     };
 
-    const onError = error => {
+    const onError = ({ message }) => {
         setLocation({
+            ...defaultLocationState,
             loaded: true,
-            coordinates: { latitude: "", longitude: "" },
-            state: "",
-            stateCode: "",
-
-            error: error.message
+            error: message
         });
     };
 
@@ -54,23 +50,23 @@ export const GeoLocationProvider = ({ children }) => {
         if (!navigator.geolocation) {
             onError({ message: "Geolocation is not supported by your browser." });
         } else {
-            navigator.geolocation.getCurrentPosition(onSuccess, onError, {timeout: 20000});
+            navigator.geolocation.getCurrentPosition(onSuccess, onError, { timeout: 20000 });
         }
     }, []);
 
     return (
-        <GeoLocationHook.Provider value={location}>
+        <GeoLocationContext.Provider value={location}>
             {children}
-        </GeoLocationHook.Provider>
+        </GeoLocationContext.Provider>
     );
-}
+};
 
 export const useGeoLocation = () => {
-    const context = useContext(GeoLocationHook);
+    const context = useContext(GeoLocationContext);
     if (context === undefined) {
         throw new Error('useGeoLocation must be used within a GeoLocationProvider');
     }
     return context;
-}
+};
 
-export default GeoLocationHook;
+export default GeoLocationContext;
