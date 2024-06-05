@@ -9,6 +9,7 @@
 - [ ] Component documentation implementation
 - [ ] Configure Docker to run in production and development mode
 - [ ] Automatically update date and time without needing to refresh
+- [ ] Input improvements
 
 ## 💻 Requirements
 
